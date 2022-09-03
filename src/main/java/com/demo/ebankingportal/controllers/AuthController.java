@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -29,12 +31,19 @@ import com.demo.ebankingportal.payload.requests.SignupRequest;
 import com.demo.ebankingportal.payload.responses.UserInfoResponse;
 import com.demo.ebankingportal.payload.responses.MessageResponse;
 import com.demo.ebankingportal.repositories.RoleRepository;
+import com.demo.ebankingportal.repositories.TransactionRepository;
 import com.demo.ebankingportal.repositories.UserRepository;
+import com.demo.ebankingportal.securities.jwt.AuthTokenFilter;
 import com.demo.ebankingportal.securities.jwt.JwtUtils;
 import com.demo.ebankingportal.securities.services.UserDetailsImpl;
 import com.demo.ebankingportal.services.CurrencyService;
+import com.demo.ebankingportal.services.TransactionService;
+import com.demo.ebankingportal.utils.AppConstants;
 import com.github.javafaker.service.FakeValuesService;
 import com.github.javafaker.service.RandomService;
+import org.springframework.web.bind.annotation.RequestParam;
+import com.demo.ebankingportal.payload.responses.TransactionResponse;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -49,11 +58,17 @@ public class AuthController {
     @Autowired
     RoleRepository roleRepository;
     @Autowired
+    TransactionRepository transactionRepository;
+    @Autowired
     PasswordEncoder encoder;
     @Autowired
     JwtUtils jwtUtils;
     @Autowired
     CurrencyService currencyService;
+    @Autowired
+    TransactionService transactionService;
+    @Autowired
+    AuthTokenFilter authTokenFilter;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -64,14 +79,13 @@ public class AuthController {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
         List<String> roles = userDetails.getAuthorities().stream()
-        .map(item -> item.getAuthority())
-        .collect(Collectors.toList());
+                .map(item -> item.getAuthority())
+                .collect(Collectors.toList());
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .body(new UserInfoResponse(userDetails.getId(),
                         userDetails.getUsername(),
                         userDetails.getEmail(),
-                        roles)
-                        );
+                        roles));
     }
 
     @PostMapping("/signup")
@@ -127,7 +141,34 @@ public class AuthController {
     }
 
     @GetMapping("/store/currency")
-    public void getCurrencyList(){
+    public void storeCurrencyList() {
         currencyService.storeCurrencyList();
+    }
+
+    @GetMapping("/store/currency/rate")
+    public void storeCurrencyRateList() {
+        currencyService.storeCurrencyRateList();
+    }
+
+    @GetMapping("/currency/transaform")
+    public Float currnecyTransform(
+            @RequestParam(value = "source_currency", defaultValue = "USD", required = true) String source_currency,
+            @RequestParam(value = "target_currency", defaultValue = "USD", required = true) String target_currency,
+            @RequestParam(value = "amount", required = true) Float amount,
+            @RequestParam(value = "date", required = true) String date) {
+        return currencyService.currencyTransform(source_currency, target_currency, amount, date);
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/user/transactions")
+    public TransactionResponse getAllTransactions(
+            @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir,
+            HttpServletRequest request) {
+        String jwt = authTokenFilter.parseJwt(request);
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        return transactionService.getAllTransactions(pageNo, pageSize, sortBy, sortDir, username);
     }
 }

@@ -15,6 +15,7 @@ import io.jsonwebtoken.*;
 @Component
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+    
     @Value("${jwt.Secret}")
     private String jwtSecret;
     @Value("${jwt.ExpirationMs}")

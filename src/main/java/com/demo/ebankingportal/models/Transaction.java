@@ -30,7 +30,7 @@ public class Transaction extends Base {
 
     @Column(name = "amount")
     @NotNull
-    private Double amount;
+    private Float amount;
 
     @Column(name = "currency")
     @NotBlank
@@ -46,7 +46,7 @@ public class Transaction extends Base {
     public Transaction() {
     }
 
-    public Transaction(Account account, ETranType type, Double amount, String currency, String iban,
+    public Transaction(Account account, ETranType type, Float amount, String currency, String iban,
             String description) {
         this.account = account;
         this.type = type;
@@ -76,11 +76,11 @@ public class Transaction extends Base {
         this.type = type;
     }
 
-    public Double getAmount() {
+    public Float getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(Float amount) {
         this.amount = amount;
     }
 
