@@ -3,7 +3,21 @@ jobs:
   build:
     docker:
       - image: cimg/openjdk:18.0.2
+    working_directory: ~/e-banking-portal
     steps:
       - checkout
       - run: java --version
+      - run:
+          name: login to dockerhub
+          command: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+      - restore_cache:
+          keys: 
+            - e-banking-portal-{{ checksun "pom.xml" }}
+      - run: mvn dependency:go-offline
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: e-banking-portal-{{ checksun "pom.xml" }}
+      
       - run: mvn clean package
