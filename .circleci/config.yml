@@ -26,16 +26,14 @@ jobs:
       - run:
           name: login to dockerhub
           command: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-      - run: docker build -t e-banking-portal:latest . 
-      - run: docker images
       - restore_cache:
           keys: 
             - e-banking-portal-{{ checksum "pom.xml" }}
       - run: mvn dependency:go-offline
-
       - save_cache:
           paths:
             - ~/.m2
           key: e-banking-portal-{{ checksum "pom.xml" }}
-      
       - run: mvn clean package
+      - run: docker build -t e-banking-portal:latest . 
+      - run: docker images
