@@ -16,7 +16,6 @@ jobs:
           MYSQL_HOST: 127.0.0.1
           MYSQL_ROOT_PASSWORD: secret
           MYSQL_DATABASE: e_banking
-          CONFIG_SECCOMP: unconfined
     working_directory: ~/e-banking-portal
     steps:
       - checkout
