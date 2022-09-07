@@ -23,7 +23,8 @@ jobs:
       - run:
           name: login to dockerhub
           command: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-      # - run: docker-compose up -d
+      - run: docker build -t e-banking-portal:latest . 
+      - run: docker images
       - restore_cache:
           keys: 
             - e-banking-portal-{{ checksum "pom.xml" }}
