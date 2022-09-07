@@ -9,5 +9,4 @@ class EBankingPortalApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
