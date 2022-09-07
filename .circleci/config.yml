@@ -19,6 +19,9 @@ jobs:
     working_directory: ~/e-banking-portal
     steps:
       - checkout
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
       - run: java --version
       - run:
           name: login to dockerhub
