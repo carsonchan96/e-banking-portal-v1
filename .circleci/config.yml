@@ -36,4 +36,5 @@ jobs:
           key: e-banking-portal-{{ checksum "pom.xml" }}
       - run: mvn clean package
       - run: docker build -t e-banking-portal:latest . 
-      - run: docker images
+      - run: docker tag e-banking-portal carsonchan2020/e-banking-portal
+      - run: docker push carsonchan2020/e-banking-portal
