@@ -18,14 +18,15 @@ jobs:
       - run:
           name: login to dockerhub
           command: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+      - run: docker-compose up -d
       - restore_cache:
           keys: 
-            - e-banking-portal-{{ checksun "pom.xml" }}
+            - e-banking-portal-{{ checksum "pom.xml" }}
       - run: mvn dependency:go-offline
 
       - save_cache:
           paths:
             - ~/.m2
-          key: e-banking-portal-{{ checksun "pom.xml" }}
+          key: e-banking-portal-{{ checksum "pom.xml" }}
       
       - run: mvn clean package
