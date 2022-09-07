@@ -1,67 +1,67 @@
-package com.demo.ebankingportal;
+// package com.demo.ebankingportal;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+// import org.junit.jupiter.api.Test;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.boot.test.context.SpringBootTest;
+// import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+// import org.springframework.boot.test.web.client.TestRestTemplate;
+// import org.springframework.boot.test.web.server.LocalServerPort;
+// import org.springframework.http.HttpEntity;
+// import org.springframework.http.HttpHeaders;
+// import org.springframework.http.MediaType;
 
-import com.demo.ebankingportal.models.User;
-import com.demo.ebankingportal.repositories.UserRepository;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
+// import com.demo.ebankingportal.models.User;
+// import com.demo.ebankingportal.repositories.UserRepository;
+// import com.fasterxml.jackson.databind.JsonNode;
+// import com.fasterxml.jackson.databind.ObjectMapper;
 
-import net.minidev.json.JSONObject;
+// import net.minidev.json.JSONObject;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+// import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import static org.hamcrest.CoreMatchers.containsString;
+// import static org.hamcrest.CoreMatchers.containsString;
 
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class HttpRequestTests {
+// @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+// public class HttpRequestTests {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+//     private final ObjectMapper objectMapper = new ObjectMapper();
     
-    private int port = 8080;
+//     @LocalServerPort
+//     private int port;
 
-    @Autowired
-    private TestRestTemplate testRestTemplate;
+//     @Autowired
+//     private TestRestTemplate testRestTemplate;
 
-    @Autowired
-    UserRepository userRepository;
+//     @Autowired
+//     UserRepository userRepository;
 
-    @Test
-    public void signupFunctionSuccess() throws Exception{
-        if(!userRepository.existsByUsername("carsonchan")){
-            userRepository.save(new User(
-                "carsonchan",
-                "A-9999999999",
-                "carsonchan@demo.com",
-                "carsonchanpwd"
-            ));
-        }
-        JSONObject requestObject = new JSONObject();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        requestObject.put("username", "carsonchan");
-        // requestObject.put("email", "carsonchan@demo.com");
-        requestObject.put("password", "carsonchanpwd");
-        // requestObject.put("roles", new ArrayList<>());
-        HttpEntity<String> request = new HttpEntity<String>(requestObject.toString(),headers);
+//     @Test
+//     public void signupFunctionSuccess() throws Exception{
+//         if(!userRepository.existsByUsername("carsonchan")){
+//             userRepository.save(new User(
+//                 "carsonchan",
+//                 "A-9999999999",
+//                 "carsonchan@demo.com",
+//                 "carsonchanpwd"
+//             ));
+//         }
+//         JSONObject requestObject = new JSONObject();
+//         HttpHeaders headers = new HttpHeaders();
+//         headers.setContentType(MediaType.APPLICATION_JSON);
+//         requestObject.put("username", "carsonchan");
+//         // requestObject.put("email", "carsonchan@demo.com");
+//         requestObject.put("password", "carsonchanpwd");
+//         // requestObject.put("roles", new ArrayList<>());
+//         HttpEntity<String> request = new HttpEntity<String>(requestObject.toString(),headers);
 
-        String result = testRestTemplate.postForObject("http://127.0.0.1:"+port+"/api/auth/signin", request, String.class);
+//         String result = testRestTemplate.postForObject("http://127.0.0.1:"+port+"/api/auth/signin", request, String.class);
 
-        JsonNode root = objectMapper.readTree(result);
+//         JsonNode root = objectMapper.readTree(result);
 
-        assertNotNull(result);
-        assertNotNull(root);
-        System.out.println(root.toString());
-        org.hamcrest.MatcherAssert.assertThat(root.toString(),containsString("username\":\"carsonchan\""));
-    }
-}
+//         assertNotNull(result);
+//         assertNotNull(root);
+//         System.out.println(root.toString());
+//         org.hamcrest.MatcherAssert.assertThat(root.toString(),containsString("username\":\"carsonchan\""));
+//     }
+// }
