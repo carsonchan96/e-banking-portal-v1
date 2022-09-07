@@ -11,6 +11,7 @@ jobs:
   build:
     docker:
       - image: cimg/openjdk:18.0.2
+      - image: cimg/mysql:8.0
     working_directory: ~/e-banking-portal
     steps:
       - checkout
