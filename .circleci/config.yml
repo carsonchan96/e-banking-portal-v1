@@ -6,3 +6,4 @@ jobs:
     steps:
       - checkout
       - run: java --version
+      - run: mvn clean package
