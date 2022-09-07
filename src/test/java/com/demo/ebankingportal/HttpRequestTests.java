@@ -28,8 +28,7 @@ public class HttpRequestTests {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     
-    @LocalServerPort
-    private int port;
+    private int port = 8080;
 
     @Autowired
     private TestRestTemplate testRestTemplate;
