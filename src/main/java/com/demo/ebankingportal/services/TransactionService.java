@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.demo.ebankingportal.dto.TransactionDto;
+// import com.demo.ebankingportal.kafka.JsonKafkaProducer;
 import com.demo.ebankingportal.models.ETranType;
 import com.demo.ebankingportal.models.Transaction;
 import com.demo.ebankingportal.models.User;
@@ -36,6 +37,9 @@ public class TransactionService {
 
     @Value("${currency.Base}")
     private String target_currency;
+
+    @Autowired
+    // private JsonKafkaProducer jsonKafkaProducer;
 
     public TransactionService(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
@@ -85,6 +89,8 @@ public class TransactionService {
         transactionResponse.setTotalElements(transactions.getTotalElements());
         transactionResponse.setTotalPages(transactions.getTotalPages());
         transactionResponse.setLast(transactions.isLast());
+        
+        // jsonKafkaProducer.sendTransactionMessage(transactionResponse);
 
         return transactionResponse;
     }

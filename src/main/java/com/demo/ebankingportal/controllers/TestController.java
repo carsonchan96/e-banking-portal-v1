@@ -1,15 +1,25 @@
 package com.demo.ebankingportal.controllers;
 
+import java.util.concurrent.ExecutionException;
+
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+// import com.demo.ebankingportal.kafka.JsonKafkaProducer;
+// import com.demo.ebankingportal.kafka.KafkaProducer;
+import com.demo.ebankingportal.models.User;
 import com.demo.ebankingportal.payload.responses.MessageResponse;
 import com.demo.ebankingportal.repositories.AccountRepository;
 import com.demo.ebankingportal.repositories.RoleRepository;
@@ -35,6 +45,15 @@ public class TestController {
 
     @Autowired
     DatabaseService databaseService;
+
+    @Autowired
+    KafkaTemplate<String, String> kafkaTemplate;
+
+    // @Autowired
+    // private KafkaProducer kafkaProducer;
+
+    // @Autowired
+    // private JsonKafkaProducer jsonKafkaProducer;
 
     @GetMapping("/all")
     public String allAccess() {
@@ -73,4 +92,16 @@ public class TestController {
     public String adminAccess() {
         return "Admin Board.";
     }
+
+    // @GetMapping("/kafka/publish")
+    // public ResponseEntity<?> publish(@RequestParam("message")String message){
+    //     kafkaProducer.sendMessage(message);
+    //     return ResponseEntity.ok("Message sent to the topic");
+    // }
+
+    // @PostMapping("/publish/user")
+    // public ResponseEntity<?> publishUser(@RequestBody User user){
+    //     jsonKafkaProducer.sendMessage(user);
+    //     return ResponseEntity.ok("Json message send to kafka topic");
+    // }
 }

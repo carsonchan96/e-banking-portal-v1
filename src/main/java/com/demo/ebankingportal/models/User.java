@@ -7,13 +7,15 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "email"),
         @UniqueConstraint(columnNames = "identityNo")
 })
-public class User extends Base{
+public class User extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -106,4 +108,13 @@ public class User extends Base{
     public void setAccounts(Set<Account> accounts) {
         this.accounts = accounts;
     }
+
+    // @Override
+    // public String toString() {
+    //     return "User{" +
+    //             "id=" + id +
+    //             ", username='" + username + '\'' +
+    //             ", email='" + email + '\'' +
+    //             '}';
+    // }
 }
