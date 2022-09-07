@@ -16,6 +16,7 @@ jobs:
           MYSQL_HOST: 127.0.0.1
           MYSQL_ROOT_PASSWORD: secret
           MYSQL_DATABASE: e_banking
+        command: [--security-opt seccomp=unconfined]
     working_directory: ~/e-banking-portal
     steps:
       - checkout
@@ -38,3 +39,6 @@ jobs:
       - run: docker build -t e-banking-portal:latest . 
       - run: docker tag e-banking-portal carsonchan2020/e-banking-portal
       - run: docker push carsonchan2020/e-banking-portal
+
+      # deployment
+      # ssh to service pull imagan and run
