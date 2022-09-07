@@ -11,6 +11,7 @@ jobs:
   build:
     docker:
       - image: cimg/openjdk:18.0.2
+        command: [--port 8080:8080]
       - image: cimg/mysql:8.0
         environment:
           MYSQL_HOST: 127.0.0.1
